@@ -14,13 +14,13 @@ import allure
                                    "tags": [],
                                    "info": {"автор": "TvoeNastroenie", "категория": "Животные",
                                             "раздел": "Смехотворное явление"}}])  # пустой массив
-def test_post_mem(fix_test_token, fix_create_mem, body):
-    fix_create_mem.create_mem(body, fix_test_token.token)
-    fix_create_mem.check_status_code_is_200()
-    fix_create_mem.check_text_in_response(body)
-    fix_create_mem.check_url_in_response(body)
-    fix_create_mem.check_tags_in_response(body)
-    fix_create_mem.check_info_in_response(body)
+def test_post_mem(test_token_manager, create_meme_endpoint, body):
+    create_meme_endpoint.create_mem(body, test_token_manager.token)
+    create_meme_endpoint.check_status_code_is_200()
+    create_meme_endpoint.check_text_in_response(body)
+    create_meme_endpoint.check_url_in_response(body)
+    create_meme_endpoint.check_tags_in_response(body)
+    create_meme_endpoint.check_info_in_response(body)
 
 
 TEST_CASES = [
@@ -60,18 +60,18 @@ TEST_CASES = [
 @allure.story('Post info about mem')
 @pytest.mark.negative
 @pytest.mark.parametrize("body", TEST_CASES, ids=[c["name"] for c in TEST_CASES])
-def test_post_mem_negative(fix_test_token, fix_create_mem, body):
-    fix_create_mem.create_mem(body, fix_test_token.token)
-    fix_create_mem.check_status_code_is_400()
+def test_post_mem_negative(test_token_manager, create_meme_endpoint, body):
+    create_meme_endpoint.create_mem(body, test_token_manager.token)
+    create_meme_endpoint.check_status_code_is_400()
 
 
 @allure.title('Post mem')
 @allure.feature('mem CRUD')
 @allure.story('Post info about mem')
 @pytest.mark.negative
-def test_post_without_token(fix_create_mem):
+def test_post_without_token(create_meme_endpoint):
     token = ''
     body = {"text": "Единорог", "url": "https://cs17.pikabu.ru/s/2025/09/27/13/oylvkzxu.webp", "tags": ['Юмор'],
             "info": {"автор": "TvoeNastroenie"}}
-    fix_create_mem.create_mem(body, token)
-    fix_create_mem.check_status_code_is_401()
+    create_meme_endpoint.create_mem(body, token)
+    create_meme_endpoint.check_status_code_is_401()
