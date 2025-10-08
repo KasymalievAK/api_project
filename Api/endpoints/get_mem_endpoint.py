@@ -1,7 +1,7 @@
 import requests
 
 
-from Api.methods.general import GeneralMethods
+from Api.endpoints.general_endpoint import GeneralMethods
 
 
 class GetMethod(GeneralMethods):

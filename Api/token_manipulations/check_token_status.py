@@ -5,8 +5,8 @@ import os
 
 from dotenv import set_key
 from dataclasses import dataclass
-from Api.methods.general import GeneralMethods
-from Api.methods.authorize_methods import Authorize
+from Api.endpoints.general_endpoint import GeneralMethods
+from Api.endpoints.authorize_endpoint import Authorize
 
 
 @dataclass
@@ -35,11 +35,11 @@ class TokenManager(GeneralMethods):
 
         else:
             auth1 = Authorize()
-            auth1.method_for_authorize({"name": "Testislav"})
+            auth1.user_authorize({"name": "Testislav"})
             token = auth1.json["token"]
             create_name = auth1.json["username"]
             auth2 = Authorize()
-            auth2.method_for_authorize({"name": "Rostislav"})
+            auth2.user_authorize({"name": "Rostislav"})
             another_token = auth2.json["token"]
             set_key(".env", "actual_token", token)
             set_key(".env", "actual_token_2", another_token)

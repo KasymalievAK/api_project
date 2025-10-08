@@ -6,16 +6,16 @@ import allure
 @allure.feature('mem CRUD')
 @allure.story('Update info about mem')
 @pytest.mark.positive
-def test_put_mem(fix_test_token, fix_test_mem, fix_put_mem):
-    object_id = fix_test_mem.object_id
+def test_put_mem(test_token_manager, create_test_mem, put_mem_endpoint):
+    object_id = create_test_mem.object_id
     body = {"id": object_id, "text": "лягушка", "url": "https://cs20.pikabu.ru/s/2025/09/28/17/df42xki4.webp",
             "tags": ["Юмор", "Комиксы"], "info": {"раздел": "Лига биологов", "автор": "REDLIS"}}
-    fix_put_mem.method_for_put_mem(object_id, fix_test_token.token, body)
-    fix_put_mem.check_status_code_is_200()
-    fix_put_mem.check_text_in_response(body)
-    fix_put_mem.check_url_in_response(body)
-    fix_put_mem.check_tags_in_response(body)
-    fix_put_mem.check_info_in_response(body)
+    put_mem_endpoint.method_for_put_mem(object_id, test_token_manager.token, body)
+    put_mem_endpoint.check_status_code_is_200()
+    put_mem_endpoint.check_text_in_response(body)
+    put_mem_endpoint.check_url_in_response(body)
+    put_mem_endpoint.check_tags_in_response(body)
+    put_mem_endpoint.check_info_in_response(body)
 
 
 TEST_CASES = [
@@ -55,33 +55,33 @@ TEST_CASES = [
 @allure.story('Update info about mem')
 @pytest.mark.negative
 @pytest.mark.parametrize("body", TEST_CASES, ids=[c["name"] for c in TEST_CASES])
-def test_put_mem_negative(fix_test_token, fix_test_mem, fix_put_mem, body):
-    body["id"] = fix_test_mem.object_id
-    fix_put_mem.method_for_put_mem(fix_test_mem.object_id, fix_test_token.token, body)
-    fix_put_mem.check_status_code_is_400()
+def test_put_mem_negative(test_token_manager, create_test_mem, put_mem_endpoint, body):
+    body["id"] = create_test_mem.object_id
+    put_mem_endpoint.method_for_put_mem(create_test_mem.object_id, test_token_manager.token, body)
+    put_mem_endpoint.check_status_code_is_400()
 
 
 @allure.title('Put mem')
 @allure.feature('mem CRUD')
 @allure.story('Update info about mem')
 @pytest.mark.negative
-def test_put_without_token(fix_put_mem, fix_test_mem):
-    body = {"id": fix_test_mem.object_id, "text": "лягушка",
+def test_put_without_token(put_mem_endpoint, create_test_mem):
+    body = {"id": create_test_mem.object_id, "text": "лягушка",
             "url": "https://cs20.pikabu.ru/s/2025/09/28/17/df42xki4.webp",
             "tags": ["Юмор", "Комиксы"], "info": {"раздел": "Лига биологов", "автор": "REDLIS"}}
     token = ''
-    fix_put_mem.method_for_put_mem(fix_test_mem.object_id, token, body)
-    fix_put_mem.check_status_code_is_401()
+    put_mem_endpoint.method_for_put_mem(create_test_mem.object_id, token, body)
+    put_mem_endpoint.check_status_code_is_401()
 
 
 @allure.title('Put mem')
 @allure.feature('mem CRUD')
 @allure.story('Update info about mem')
 @pytest.mark.negative
-def test_put_another_token(fix_test_token, fix_test_mem, fix_put_mem):
-    body = {"id": fix_test_mem.object_id, "text": "лягушка",
+def test_put_another_token(test_token_manager, create_test_mem, put_mem_endpoint):
+    body = {"id": create_test_mem.object_id, "text": "лягушка",
             "url": "https://cs20.pikabu.ru/s/2025/09/28/17/df42xki4.webp",
             "tags": ["Юмор", "Комиксы"], "info": {"раздел": "Лига биологов", "автор": "REDLIS"}}
 
-    fix_put_mem.method_for_put_mem(fix_test_mem.object_id, fix_test_token.another_token, body)
-    fix_put_mem.check_status_code_is_403()
+    put_mem_endpoint.method_for_put_mem(create_test_mem.object_id, test_token_manager.another_token, body)
+    put_mem_endpoint.check_status_code_is_403()

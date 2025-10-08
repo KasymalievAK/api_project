@@ -6,11 +6,11 @@ import allure
 @allure.story('authorize for user')
 @pytest.mark.positive
 @pytest.mark.parametrize('body', [{"name": "Testov"}])
-def test_authorize(fix_authorize, body):
-    fix_authorize.method_for_authorize(body)
-    fix_authorize.check_status_code_is_200()
-    fix_authorize.check_token_is_not_null()
-    fix_authorize.check_user(body)
+def test_authorize(authorize_endpoints, body):
+    authorize_endpoints.user_authorize(body)
+    authorize_endpoints.check_status_code_is_200()
+    authorize_endpoints.check_token_is_not_null()
+    authorize_endpoints.check_user(body)
 
 
 @allure.title('Authorize in system')
@@ -20,6 +20,6 @@ def test_authorize(fix_authorize, body):
                                   {"name": None},
                                   {"name": ["Тестов"]},
                                   {"name": 1}])
-def test_negative_authorize(fix_authorize, body):
-    fix_authorize.method_for_authorize(body)
-    fix_authorize.check_status_code_is_400()
+def test_negative_authorize(authorize_endpoints, body):
+    authorize_endpoints.user_authorize(body)
+    authorize_endpoints.check_status_code_is_400()
